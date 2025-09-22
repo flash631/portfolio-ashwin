@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0f1a" />
+  <title>Publications — Ashwin M R</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Page-specific polish that matches site aesthetics */
+    .page{max-width:var(--maxw); margin:0 auto; padding:48px 24px 24px;}
+    .page h1{font-size:clamp(34px,4vw,56px); letter-spacing:-.02em; margin:.2em 0 .6em}
+    .kicker{color:var(--muted); letter-spacing:.14em; text-transform:uppercase; font-weight:700; font-size:.76rem; display:flex; align-items:center; gap:10px}
+    .kicker .dot{width:6px;height:6px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 6px rgba(59,130,246,.15)}
+
+    .pub-section{margin:36px 0}
+    .pub-section h2{font-size:1.2rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:0 0 14px; display:flex; align-items:center; gap:10px}
+    .pub-section h2::after{content:""; flex:1; height:1px; background:var(--line)}
+
+    .pub-list{list-style:none; margin:0; padding:0; display:grid; gap:14px}
+    .pub{border:1px solid var(--line); background:var(--card); border-radius:16px; padding:16px 18px; box-shadow:0 10px 28px rgba(0,0,0,.22);}
+    .pub .title{font-weight:700;}
+    .pub .authors{color:var(--muted); margin-top:6px}
+    .pub .meta{color:var(--muted); font-size:.95rem; margin-top:6px}
+    .pub a{color:var(--ink)}
+
+    /* Patents layout */
+  .patent{display:grid; grid-template-columns:56px 1fr; gap:14px; align-items:center}
+  .thumb{width:56px; height:72px; border:1px dashed rgba(255,255,255,.2); border-radius:8px; display:grid; place-items:center; color:var(--muted); font-size:.72rem}
+  .thumb img{width:32px; height:auto; display:block}
+
+    /* Apple‑smooth reveal animations */
+    .reveal{opacity:0; transform:translateY(18px) scale(.985); transition:opacity .6s cubic-bezier(.22,.61,.36,1), transform .6s cubic-bezier(.22,.61,.36,1)}
+    .reveal.in{opacity:1; transform:translateY(0) scale(1)}
+
+    @media (min-width:900px){ .page{padding:72px 24px 24px} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="bar">
+        <div class="brand"><span class="dot"></span> Aerospace Engineer</div>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="site-menu">
+          <div class="lines"><span></span></div>
+        </button>
+      </div>
+    </header>
+
+    <nav class="menu" id="site-menu" aria-hidden="true">
+      <div class="sheet" role="dialog" aria-label="Site navigation">
+        <ul>
+          <li><a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M3 9.5 12 3l9 6.5v9a1.5 1.5 0 0 1-1.5 1.5H4.5A1.5 1.5 0 0 1 3 18.5v-9Z"/><path d="M9 21V12h6v9"/></svg>Home</a></li>
+          <li><a href="about.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="7.5" r="3.5"/><path d="M4 20.5a8 8 0 0 1 16 0"/></svg>About</a></li>
+          <li><a href="experiences.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M8 7.5V5.5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Experiences</a></li>
+          <li><a href="publications.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M6 3.5h9.5a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H6z"/><path d="M6 16.5h9.5"/></svg>Publications</a></li>
+          <li><a href="projects.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M3.5 8.5h17v9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/><path d="M7 8.5V6.5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/></svg>Projects</a></li>
+          <li><a href="contact.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 5.5h16v13H4z"/><path d="m4 7 8 6 8-6"/></svg>Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main>
+      <section class="page" id="publications" aria-label="Publications">
+        <h1>Publications</h1>
+
+        <!-- JOURNAL PAPER -->
+        <div class="pub-section">
+          <h2>Journal Paper</h2>
+          <ul class="pub-list">
+            <li class="pub reveal">
+              <div class="title">Comparative analytical analysis and component selection of resistojet thruster for satellite propulsion</div>
+              <div class="authors"><strong>Aswin M R</strong>, Akshay Pavithran, Yash Mangrole, Shriya Shivaraman, Chinmay Sanjay Kulave, Amit Kumar Thakur, Balaji R</div>
+              <div class="meta"><em>Journal of Space Safety Engineering</em>, Volume 11, Issue 1, 2024, Pages 20–34, ISSN 2468-8967</div>
+              <div><a href="https://doi.org/10.1016/j.jsse.2024.01.002" target="_blank" rel="noopener">https://doi.org/…</a></div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- CONFERENCE PAPERS -->
+        <div class="pub-section">
+          <h2>Conference Papers</h2>
+          <ul class="pub-list">
+            <li class="pub reveal">
+              <div class="title">Structural and Thermal Analysis of a CubeSat</div>
+              <div class="authors"><strong>M.R. Aswin</strong>, Pavithran, A., Mangrole, Y., Ravi, B.</div>
+              <div class="meta">In: Deepak, B.B.V.L., Bahubalendruni, M.V.A.R., Parhi, D.R.K., Biswal, B.B. (eds) <em>Intelligent Manufacturing Systems in Industry 4.0</em>. IPDIMS 2022. Lecture Notes in Mechanical Engineering. Springer, Singapore. 2023</div>
+              <div><a href="https://doi.org/10.1007/978-981-99-1665-8_32" target="_blank" rel="noopener">https://doi.org/…</a></div>
+            </li>
+            <li class="pub reveal">
+              <div class="title">Material selection based on joule heating simulation for resistojet thruster</div>
+              <div class="authors"><strong>M.R. Aswin</strong>, Akshay Pavithran, Yash Mangrole, Shriya Shivaraman, Chinmay Sanjay Kulave, R. Balaji</div>
+              <div class="meta"><em>Materials Today: Proceedings</em>, 2023, ISSN 2214‑7853</div>
+              <div><a href="https://doi.org/10.1016/j.matpr.2023.07.274" target="_blank" rel="noopener">https://doi.org/…</a></div>
+            </li>
+            <li class="pub reveal">
+              <div class="title">Comparative study over double wedge and biconvex aerofoils for laminar flow using CFD</div>
+              <div class="authors">S. Athul Krishna and <strong>M. R. Aswin</strong></div>
+              <div class="meta"><em>Journal of Physics: Conference Series</em>, vol. 2272, no. 1, p. 012003, 2022</div>
+              <div><a href="http://dx.doi.org/10.1088/1742-6596/2272/1/012003" target="_blank" rel="noopener">https://doi.org/…</a></div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- PATENTS -->
+        <div class="pub-section">
+          <h2>Patents</h2>
+          <ul class="pub-list">
+            <li class="pub patent reveal">
+              <div class="thumb"><img src="images/patent_pic1.jpeg" alt="PDF"></div>
+              <div>
+                <div class="title">IN202411086101 — Method of testing the efficiency of Resistojet Thrusters with remodeled nozzle and flow chamber design</div>
+              </div>
+            </li>
+            <li class="pub patent reveal">
+              <div class="thumb"><img src="images/patent_pic2.jpeg" alt="PDF"></div>
+              <div>
+                <div class="title">IN202311042412 — Propulsion performance monitoring apparatus</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <div class="tag-left">Publications</div>
+
+    <footer>
+      <div class="foot">
+        <div>© <strong>2025</strong> Ashwin MR</div>
+        <div id="clock" aria-live="polite">—</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="script.js" defer></script>
+  <script>
+    // IntersectionObserver to apply Apple‑smooth reveals
+    const IO = new IntersectionObserver((entries)=>{
+      for(const e of entries){ if(e.isIntersecting){ e.target.classList.add('in'); IO.unobserve(e.target); } }
+    }, {rootMargin:'0px 0px -10% 0px', threshold:.08});
+    document.querySelectorAll('.reveal').forEach(el=>IO.observe(el));
+  </script>
+</body>
+</html>

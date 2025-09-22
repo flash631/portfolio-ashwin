@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0f1a" />
+  <title>Projects — Ashwin M R</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Page-specific styles (keeps the same design language) -->
+  <style>
+    /* Section wrapper */
+    .projects-wrap{max-width:var(--maxw); margin:0 auto; padding:56px 24px 28px}
+    .projects-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:22px}
+    .projects-head h2{font-size:clamp(40px,5.4vw,72px); line-height:1.05; letter-spacing:-.02em; margin:0}
+    .projects-head .sub{color:var(--muted)}
+    .projects-head .underline{display:block; height:3px; width:84px; background:linear-gradient(90deg, var(--primary), rgba(255,255,255,.25)); border-radius:999px; margin-top:10px}
+
+    /* Responsive grid */
+    .projects-grid{display:grid; gap:20px; grid-template-columns:1fr}
+    @media (min-width:720px){.projects-grid{grid-template-columns:1fr 1fr}}
+    @media (min-width:1080px){.projects-grid{grid-template-columns:1fr 1fr 1fr}}
+
+    /* Card */
+    .project-card{display:flex; flex-direction:column; gap:14px; padding:18px; border-radius:var(--radius); border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025)); box-shadow:0 6px 24px rgba(0,0,0,.28);
+      transform:translateY(0) scale(1); transition:transform .6s cubic-bezier(.22,.61,.36,1), box-shadow .6s cubic-bezier(.22,.61,.36,1), background .6s ease}
+    .project-card:hover{transform:translateY(-8px) scale(1.01); box-shadow:0 26px 80px rgba(0,0,0,.40); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03))}
+
+    .project-title{display:flex; align-items:center; justify-content:space-between; gap:12px}
+    .project-title h3{margin:0; font-size:1.12rem}
+    .badge{font-size:.72rem; color:var(--muted); border:1px solid var(--line); padding:6px 10px; border-radius:999px}
+
+    /* Thumbnails row */
+    .thumbs{display:grid; grid-template-columns:repeat(3, 1fr); gap:10px}
+    .thumb{aspect-ratio:4/3; border-radius:14px; border:1px solid var(--line); overflow:hidden; position:relative; background:var(--card)}
+    .thumb::before{content:""; position:absolute; inset:0; background:
+      radial-gradient(400px 140px at 80% -20%, rgba(59,130,246,.22), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      opacity:.75}
+    .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    /* Actions */
+    .actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:6px}
+    .btn.smol{padding:10px 14px; border-radius:14px; font-weight:600}
+
+    /* Reveal-on-scroll (Apple‑smooth vibe) */
+    .reveal{opacity:0; transform:translateY(18px); will-change:transform, opacity}
+    .reveal.in{opacity:1; transform:none; transition:opacity .8s ease, transform .8s cubic-bezier(.22,.61,.36,1); transition-delay:var(--d, 0ms)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="bar">
+        <div class="brand"><span class="dot"></span> Aerospace Engineer</div>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="site-menu">
+          <div class="lines"><span></span></div>
+        </button>
+      </div>
+    </header>
+
+    <nav class="menu" id="site-menu" aria-hidden="true">
+      <div class="sheet" role="dialog" aria-label="Site navigation">
+        <ul>
+          <li><a href="index.html#home"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M3 9.5 12 3l9 6.5v9a1.5 1.5 0 0 1-1.5 1.5H4.5A1.5 1.5 0 0 1 3 18.5v-9Z"/><path d="M9 21V12h6v9"/></svg>Home</a></li>
+          <li><a href="about.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="7.5" r="3.5"/><path d="M4 20.5a8 8 0 0 1 16 0"/></svg>About</a></li>
+          <li><a href="experiences.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M8 7.5V5.5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Experiences</a></li>
+          <li><a href="publications.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M6 3.5h9.5a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H6z"/><path d="M6 16.5h9.5"/></svg>Publications</a></li>
+          <li><a href="#" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M3.5 8.5h17v9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/><path d="M7 8.5V6.5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/></svg>Projects</a></li>
+          <li><a href="contact.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 5.5h16v13H4z"/><path d="m4 7 8 6 8-6"/></svg>Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main>
+      <section class="projects-wrap" id="projects" aria-label="Projects">
+        <div class="projects-head reveal" style="--d:40ms">
+          <div>
+            <h2>Projects</h2>
+            <span class="underline" aria-hidden="true"></span>
+          </div>
+          <div class="sub">Curated selection of academic + personal builds</div>
+        </div>
+
+        <div class="projects-grid">
+          <!-- Row 1: 3 cards -->
+
+          <article class="project-card reveal" style="--d:80ms">
+            <div class="project-title"><h3>Leveraging NLP and LLMs for Automated SysML Model Generation in MBSE</h3><span class="badge">2025</span></div>
+            <div class="thumbs" aria-hidden="true">
+              <div class="thumb"><img src="images/mbse_p1.png" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/mbse_p2.png" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/mbse_p3.png" loading="lazy" alt=""></div>
+            </div>
+            <div class="actions">
+              <a class="btn smol" href="https://drive.google.com/file/d/1mmR1Owt_qN2jV60jqrzv4O0JwrtrUbZx/view?usp=drive_link" target="_blank" rel="noopener">GitHub Link</a>
+              <a class="btn smol">UIUC</a>
+            </div>
+          </article>
+
+          <article class="project-card reveal" style="--d:140ms">
+            <div class="project-title"><h3>2D Adaptive Mesh Refinement (AMR) (QuadTree)</h3><span class="badge">2025</span></div>
+            <div class="thumbs" aria-hidden="true">
+              <div class="thumb"><img src="images/amr_pic1.png" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/amr_pic2.png" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/amr_pic3.png" loading="lazy" alt=""></div>
+            </div>
+            <div class="actions">
+              <a class="btn smol" href="https://github.com/flash631/amr2" target="_blank" rel="noopener">GitHub Link</a>
+            </div>
+          </article>
+
+
+          <article class="project-card reveal" style="--d:200ms">
+            <div class="project-title"><h3>High Performance Radiant Heater Design Configuration Analysis</h3><span class="badge">2024</span></div>
+            <div class="thumbs" aria-hidden="true">
+              <div class="thumb"><img src="images/hprh_p1.png" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/hprh_p2.png" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/hprh_p3.png" loading="lazy" alt=""></div>
+            </div>
+            <div class="actions">
+              <a class="btn smol" href="https://drive.google.com/file/d/1f7aZRZaI4Pqd_fedk61qruvrYWXlEn-s/view?usp=drive_link" target="_blank" rel="noopener">Project Description</a>
+              <a class="btn smol">VSSC</a>
+            </div>
+          </article>
+
+
+          
+
+          
+
+          
+
+          <!-- Row 2: 3 cards -->
+          <article class="project-card reveal" style="--d:80ms">
+            <div class="project-title"><h3>TracePro CoordX — 3D Coordinate Data Consolidation</h3><span class="badge">2024</span></div>
+            <div class="thumbs" aria-hidden="true">
+              <div class="thumb"><img src="images/tracepro_p1.png" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/tracepro_p2.png" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/tracepro_p3.png" loading="lazy" alt=""></div>
+            </div>
+            <div class="actions">
+              <a class="btn smol" href="https://github.com/flash631/tracepro-coordx" target="_blank" rel="noopener">GitHub Link</a>
+              <a class="btn smol">VSSC</a>
+            </div>
+          </article>
+
+          <article class="project-card reveal" style="--d:140ms">
+            <div class="project-title"><h3>Experimental, Numerical and CFD Testing of Improvised Resistojet Thruster</h3><span class="badge">2023</span></div>
+            <div class="thumbs" aria-hidden="true">
+              <div class="thumb"><img src="images/resistojet1.png" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/resistojet2.png" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/resistojet3.png" loading="lazy" alt=""></div>
+            </div>
+            <div class="actions">
+              <a class="btn smol" href="https://drive.google.com/file/d/11vk5BDrp3bqpBe1QyivYahm95EkygH4K/view?usp=drive_link" target="_blank" rel="noopener">Project Description</a>
+            </div>
+          </article>
+
+          <article class="project-card reveal" style="--d:200ms">
+            <div class="project-title"><h3>Rutherford-EPSim (Electric Pump System Simulator)</h3><span class="badge">2022</span></div>
+            <div class="thumbs" aria-hidden="true">
+              <div class="thumb"><img src="images/ruth_pic1.png" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/ruth_pic2.png" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/ruth_pic3.png" loading="lazy" alt=""></div>
+            </div>
+            <div class="actions">
+              <a class="btn smol" href="https://github.com/flash631/rutherford-epsim" target="_blank" rel="noopener">GitHub Link</a>
+            </div>
+          </article>
+
+          
+
+          <!-- Row 3: 3 cards -->
+
+          <article class="project-card reveal" style="--d:80ms">
+            <div class="project-title"><h3>Voice→Intent Digital Twin for Differential-Drive Robots</h3><span class="badge">2020</span></div>
+            <div class="thumbs" aria-hidden="true">
+              <div class="thumb"><img src="images/iot_pic1.jpg" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/iot_pic2.jpg" loading="lazy" alt=""></div>
+              <div class="thumb"><img src="images/iot_pic3.png" loading="lazy" alt=""></div>
+            </div>
+            <div class="actions">
+              <a class="btn smol" href="https://github.com/flash631/VoxNav" target="_blank" rel="noopener">GitHub Link</a>
+            </div>
+          </article>
+          
+
+          <!-- <article class="project-card reveal" style="--d:140ms">
+            <div class="project-title"><h3>Project 5</h3><span class="badge">2023</span></div>
+            <div class="thumbs" aria-hidden="true">
+              <div class="thumb"></div><div class="thumb"></div><div class="thumb"></div>
+            </div>
+            <div class="actions">
+              <a class="btn smol" href="#" target="_blank" rel="noopener">GitHub Link</a>
+              <a class="btn smol" href="#" target="_blank" rel="noopener">Project Page</a>
+            </div>
+          </article>
+
+          <article class="project-card reveal" style="--d:200ms">
+            <div class="project-title"><h3>Project 6</h3><span class="badge">2023</span></div>
+            <div class="thumbs" aria-hidden="true">
+              <div class="thumb"></div><div class="thumb"></div><div class="thumb"></div>
+            </div>
+            <div class="actions">
+              <a class="btn smol" href="#" target="_blank" rel="noopener">GitHub Link</a>
+              <a class="btn smol" href="#" target="_blank" rel="noopener">Project Page</a>
+            </div>
+          </article> -->
+
+          <!-- Row 4: 3 cards -->
+
+          <!-- <article class="project-card reveal" style="--d:80ms">
+            <div class="project-title"><h3>Project 4</h3><span class="badge">2024</span></div>
+            <div class="thumbs" aria-hidden="true">
+              <div class="thumb"></div><div class="thumb"></div><div class="thumb"></div>
+            </div>
+            <div class="actions">
+              <a class="btn smol" href="#" target="_blank" rel="noopener">GitHub Link</a>
+              <a class="btn smol" href="#" target="_blank" rel="noopener">Project Page</a>
+            </div>
+          </article>
+
+          <article class="project-card reveal" style="--d:140ms">
+            <div class="project-title"><h3>Project 5</h3><span class="badge">2023</span></div>
+            <div class="thumbs" aria-hidden="true">
+              <div class="thumb"></div><div class="thumb"></div><div class="thumb"></div>
+            </div>
+            <div class="actions">
+              <a class="btn smol" href="#" target="_blank" rel="noopener">GitHub Link</a>
+              <a class="btn smol" href="#" target="_blank" rel="noopener">Project Page</a>
+            </div>
+          </article>
+
+          <article class="project-card reveal" style="--d:200ms">
+            <div class="project-title"><h3>Project 6</h3><span class="badge">2023</span></div>
+            <div class="thumbs" aria-hidden="true">
+              <div class="thumb"></div><div class="thumb"></div><div class="thumb"></div>
+            </div>
+            <div class="actions">
+              <a class="btn smol" href="#" target="_blank" rel="noopener">GitHub Link</a>
+              <a class="btn smol" href="#" target="_blank" rel="noopener">Project Page</a>
+            </div>
+          </article> -->
+
+        </div>
+      </section>
+    </main>
+
+    <div class="tag-left">Aerospace Engineer</div>
+
+    <footer>
+      <div class="foot">
+        <div>© <strong>2025</strong> Ashwin MR</div>
+        <div id="clock">—</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="script.js" defer></script>
+  <!-- Page-only script for reveal-on-scroll. You can copy this block into experiences.html to get the same "Apple-smooth" transitions there. -->
+  <script>
+    (function(){
+      const els = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach((e)=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, {threshold:.16});
+      els.forEach(el=>io.observe(el));
+    })();
+  </script>
+</body>
+</html>

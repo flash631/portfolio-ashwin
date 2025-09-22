@@ -1,0 +1,134 @@
+:root{
+  --bg:#000000;
+  --ink:#e6e8ec;
+  --muted:#a5adba;
+  --primary:#3b82f6; /* blue */
+  --card:rgba(255,255,255,0.04);
+  --line:rgba(255,255,255,0.12);
+  --ring:rgba(59,130,246,.45);
+  --blur:10px;
+  --radius:22px;
+  --maxw:1200px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 380px at 50% -120px, rgba(59,130,246,.25), rgba(0,0,0,0) 70%),
+    var(--bg);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+
+/* Fluid canvas behind content */
+#fluid-canvas{position:fixed; inset:0; z-index:0; pointer-events:none; display:block}
+.wrap{min-height:100svh; display:grid; grid-template-rows:auto 1fr auto; position:relative; z-index:1}
+header{position:sticky; top:0; z-index:40}
+
+/* Top bar */
+.bar{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; max-width:var(--maxw); margin:0 auto}
+.brand{display:flex; align-items:center; gap:10px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase; font-weight:600; font-size:.78rem}
+.brand .dot{width:6px; height:6px; border-radius:50%; background:var(--primary); box-shadow:0 0 0 6px rgba(59,130,246,.15)}
+
+/* Hamburger */
+.hamburger{appearance:none; border:0; background:transparent; cursor:pointer; width:44px; height:44px; border-radius:12px; display:grid; place-items:center; position:relative; outline:none}
+.hamburger:focus-visible{box-shadow:0 0 0 3px var(--ring)}
+.hamburger .lines{width:22px; height:14px; position:relative}
+.hamburger .lines::before,
+.hamburger .lines::after,
+.hamburger .lines span{content:""; position:absolute; left:0; right:0; height:2px; background:var(--ink); border-radius:2px; transition:transform .35s ease, opacity .2s ease}
+.hamburger .lines::before{top:0}
+.hamburger .lines span{top:6px}
+.hamburger .lines::after{bottom:0}
+.hamburger[aria-expanded="true"] .lines::before{transform:translateY(6px) rotate(45deg)}
+.hamburger[aria-expanded="true"] .lines span{opacity:0}
+.hamburger[aria-expanded="true"] .lines::after{transform:translateY(-6px) rotate(-45deg)}
+
+/* Overlay menu */
+nav.menu{position:fixed; inset:0; backdrop-filter:blur(var(--blur)); -webkit-backdrop-filter:blur(var(--blur)); background:rgba(6,10,18,.55); display:grid; place-items:center; opacity:0; pointer-events:none; transition:opacity .35s ease; z-index:30}
+nav.menu.open{opacity:1; pointer-events:auto}
+nav .sheet{width:min(92vw, 720px); background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); border:1px solid var(--line); border-radius:24px; padding:28px 22px}
+nav ul{display:grid; grid-template-columns:1fr 1fr; gap:10px; list-style:none; margin:0; padding:0}
+nav li a{display:flex; align-items:center; gap:12px; padding:16px 14px; text-decoration:none; color:var(--ink); border-radius:16px; border:1px solid transparent}
+nav li a:hover{border-color:var(--line); background:rgba(255,255,255,.03)}
+nav svg{width:20px; height:20px; stroke:var(--ink)}
+
+/* Hero */
+.hero{max-width:var(--maxw); margin:0 auto; padding:40px 24px 24px; display:grid; gap:28px; align-items:center}
+@media (min-width: 900px){
+  .hero{grid-template-columns:1.1fr .9fr; padding:64px 24px 24px; gap:48px}
+}
+/* Stronger vertical centering for the hero */
+.hero{min-height:calc(100svh - 140px); place-content:center; padding-top:24px; padding-bottom:24px}
+
+.hello{display:flex; align-items:center; gap:10px; color:var(--muted); font-weight:600; letter-spacing:.02em}
+.wave{display:inline-block; transform-origin:70% 70%; animation:wave 2.5s ease-in-out infinite}
+@keyframes wave{0%{transform:rotate(0)} 10%{transform:rotate(14deg)} 20%{transform:rotate(-8deg)} 30%{transform:rotate(14deg)} 40%{transform:rotate(-4deg)} 50%{transform:rotate(10deg)} 60%,100%{transform:rotate(0)}}
+
+h1.name{margin:.15em 0 .25em; font-size:clamp(36px, 4.2vw, 64px); line-height:1.05; letter-spacing:-.02em}
+.role{color:var(--muted); font-size:1rem; max-width:55ch}
+.role strong{color:var(--ink)}
+
+.stack{display:flex; gap:14px; flex-wrap:wrap; margin-top:22px}
+.btn{display:inline-flex; align-items:center; gap:10px; text-decoration:none; padding:14px 18px; border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); color:var(--ink); font-weight:600}
+.btn:hover{background:rgba(255,255,255,.06)}
+
+.card{aspect-ratio:1/1; width:min(100%, 500px); border-radius:var(--radius); border:1px solid var(--line); background:
+  radial-gradient(140% 100% at 100% 0, rgba(59,130,246,.12), rgba(255,255,255,0) 50%),
+  linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  position:relative; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.35)
+}
+.card::after{content:""; position:absolute; inset:0; background-image:linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px); background-size:28px 28px; opacity:.7; pointer-events:none; z-index: 0; }
+.card .avatar{
+  position: absolute;
+  /* uniform gap on all sides between card and image */
+  --gap: 8px; /* increase or decrease this value to taste */
+  inset: var(--gap);
+  /* fill the available inset area so the image can fully cover it */
+  display: block;
+  border-radius: calc(var(--radius) - var(--gap));
+  overflow: hidden;
+  padding: 0;
+  border: 0;                    /* kill the dashed placeholder border */
+  z-index: 1;
+}
+
+.card .avatar::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 0.75px rgba(255,255,255,.18);
+  pointer-events: none;
+}
+
+/* make the image fill the avatar box with equal horizontal and vertical spacing */
+.avatar-img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Vertical tag on the far left */
+.tag-left{position:fixed; left:14px; top:50%; transform:translateY(-50%) rotate(-90deg); transform-origin:left top; color:var(--muted); letter-spacing:.18em; text-transform:uppercase; font-size:.72rem; opacity:.8; pointer-events:none}
+
+/* Footer */
+footer{border-top:1px solid var(--line);}
+.foot{max-width:var(--maxw); margin:0 auto; padding:18px 24px; display:flex; align-items:center; justify-content:space-between; color:var(--muted); font-size:.92rem}
+.foot strong{color:var(--ink)}
+
+/* Accessibility: reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .wave{animation:none}
+  .hamburger .lines::before, .hamburger .lines::after, .hamburger .lines span{transition:none}
+  nav.menu{transition:none}
+}
+
+/* Minor style for school line */
+.role .school{display:block; margin-top:6px; color:var(--muted); opacity:.92}
+.role .school strong{color:var(--ink); font-weight:800}
