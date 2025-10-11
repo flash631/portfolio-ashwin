@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0f1a" />
+  <title>Experiences — Ashwin M R</title>
+  <!-- Reuse the same font and global styles as the homepage -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ===== Experiences page (page‑scoped styles) ===== */
+    main.experiences {max-width: var(--maxw); margin: 0 auto; padding: 40px 24px 24px;}
+    @media (min-width: 900px){ main.experiences{padding: 64px 24px 48px;} }
+
+    .page-title{font-size: clamp(32px, 3.6vw, 56px); line-height:1.05; letter-spacing:-.02em; margin: 8px 0 18px}
+    .page-sub{color:var(--muted); max-width: 70ch; margin-bottom: 34px}
+
+    /* Grid that mirrors the home hero two‑column rhythm */
+    .xp-grid{display: grid; gap: 22px}
+    @media (min-width: 900px){ .xp-grid{grid-template-columns: 1.1fr .9fr; gap: 28px} }
+
+    /* Row wrapper ensures equal height columns */
+    .xp-row{display: contents}
+    @media (max-width: 899px){ .xp-row{display: grid; grid-template-columns: 1fr; gap: 18px} }
+
+    /* Card that matches site aesthetic */
+    .xp-card{height: 100%; border-radius: var(--radius); border:1px solid var(--line); background:
+      radial-gradient(140% 100% at 100% 0, rgba(59,130,246,.12), rgba(255,255,255,0) 50%),
+      linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: 0 10px 40px rgba(0,0,0,.35);
+      padding: 22px; position: relative; overflow: hidden;
+    }
+    .xp-card::after{content:""; position:absolute; inset:0; background-image:linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px); background-size:28px 28px; opacity:.6; pointer-events:none}
+
+    .xp-head{display:flex; flex-direction:column; gap:6px; margin-bottom: 12px}
+    .xp-role{font-size:1.2rem; font-weight:800}
+    .xp-org{color:var(--muted); font-weight:600}
+
+    .chips{display:flex; flex-wrap:wrap; gap:10px; margin: 12px 0 6px}
+    .chip{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.03); color:var(--ink); font-weight:600; font-size:.88rem}
+    .chip svg{width:16px; height:16px; stroke:var(--ink)}
+    .chip.success{border-color: rgba(16,185,129,.35)}
+
+    .xp-body{margin-top: 12px}
+    .xp-body ul{margin:0; padding-left: 1.05em}
+    .xp-body li{margin: 8px 0; line-height:1.6}
+
+    /* Media frame (right column) */
+    .xp-media{height:100%; border-radius: var(--radius); border:1px solid var(--line); background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); overflow:hidden; position:relative}
+    .xp-media img{width:100%; height:100%; object-fit:cover; display:block}
+    .xp-cap{position:absolute; left:12px; bottom:12px; padding:8px 12px; border-radius:999px; font-weight:700; font-size:.82rem; color:var(--ink); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background:rgba(0,0,0,.35); border:1px solid var(--line)}
+
+    /* Mirror layout for alternating rows on wide screens */
+    .xp-row.alt{direction: rtl}
+    .xp-row.alt > *{direction:ltr}
+
+    /* Gentle Apple‑like reveals */
+    [data-reveal]{opacity:0; transform: translateY(18px) scale(.995); will-change: transform, opacity; transition: opacity .6s ease, transform .6s ease}
+    [data-reveal].in{opacity:1; transform: none}
+
+    /* Fine‑tune the vertical tag for this page */
+    .tag-left{left:12px}
+      /* ===== Fixes per your feedback ===== */
+    /* 1) Keep header at the top of the document (not fixed to viewport) */
+    .wrap > header{ position: static !important; }
+
+    /* 2) Perfectly align the two columns in each row */
+    .xp-grid{ align-items: start; }
+    .xp-row > *{ align-self: start; }
+    .xp-media{ margin: 0; } /* reset default figure margin */
+    .xp-card{ margin: 0; }
+
+    /* 3) Keep reveal effect but avoid vertical shift that can cause misalignment */
+    [data-reveal]{ opacity: 0; transform: none; transition: opacity .6s ease; }
+    [data-reveal].in{ opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Header + menu copied from the homepage for consistency -->
+    <header>
+      <div class="bar">
+        <div class="brand"><span class="dot"></span> Aerospace Engineer</div>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="site-menu">
+          <div class="lines"><span></span></div>
+        </button>
+      </div>
+    </header>
+
+    <nav class="menu" id="site-menu" aria-hidden="true">
+      <div class="sheet" role="dialog" aria-label="Site navigation">
+        <ul>
+          <li><a href="index.html#home"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M3 9.5 12 3l9 6.5v9a1.5 1.5 0 0 1-1.5 1.5H4.5A1.5 1.5 0 0 1 3 18.5v-9Z"/><path d="M9 21V12h6v9"/></svg>Home</a></li>
+          <li><a href="about.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="7.5" r="3.5"/><path d="M4 20.5a8 8 0 0 1 16 0"/></svg>About</a></li>
+          <li><a href="experiences.html" aria-current="page" data-active><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M8 7.5V5.5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Experiences</a></li>
+          <li><a href="publications.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M6 3.5h9.5a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H6z"/><path d="M6 16.5h9.5"/></svg>Publications</a></li>
+          <li><a href="projects.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M3.5 8.5h17v9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/><path d="M7 8.5V6.5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/></svg>Projects</a></li>
+          <li><a href="contact.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 5.5h16v13H4z"/><path d="m4 7 8 6 8-6"/></svg>Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="experiences" aria-label="Experiences">
+      <h1 class="page-title" data-reveal>Experiences</h1>
+      <p class="page-sub" data-reveal>Selected, hands‑on work where I built, tested, and learned by doing.</p>
+
+      <div class="xp-grid">
+        <!-- ===== Experience 1 ===== -->
+        <section class="xp-row" aria-label="Graduate Apprentice at VSSC, ISRO">
+          <article class="xp-card" data-reveal>
+            <header class="xp-head">
+              <div class="xp-role">Graduate Apprentice</div>
+              <div class="xp-org">VSSC — Indian Space Research Organisation · Apprenticeship</div>
+            </header>
+
+            <div class="chips" aria-label="Key meta">
+              <span class="chip" title="Duration"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5l3 2.5"/></svg>7 months</span>
+              <span class="chip" title="Dates"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M8 3.5V6M16 3.5V6M3.5 9h17"/></svg>Jan 2024 – Jul 2024</span>
+              <span class="chip" title="Place"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.8"/></svg>Thiruvananthapuram, India</span>
+              <span class="chip success" title="On‑site"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg>On‑site</span>
+            </div>
+
+            <div class="xp-body">
+              <ul>
+                <li>Performed IR thermal testing in vacuum and ambient conditions on various specimen models using IR lamps up to <strong>100 W/cm²</strong> heat flux.</li>
+                <li>Designed and executed ray‑tracing analysis on a <strong>500 mm filament IR lamp</strong> mounted on a High‑Performance Radiant Heater (HPRH) to deliver ~<strong>130 W/cm²</strong> uniformly over a <strong>200×200 mm</strong> specimen surface.</li>
+                <li>Tested an <strong>80 W CO₂ laser</strong> on a <strong>50×50 mm</strong> specimen using a laser power meter and <strong>thermopile</strong> sensor.</li>
+                <li>Built and tested improvised configurations on a parabolic reflector module with IR lamps to simulate concentrated‑surface heating up to <strong>180 W/cm²</strong>.</li>
+              </ul>
+            </div>
+          </article>
+
+          <figure class="xp-media" data-reveal>
+            <!-- Replace the src below with your own photo path if different -->
+            <img src="images/experiences_pic1.jpg" alt="IR thermal testing setup during apprenticeship at VSSC" />
+            <figcaption class="xp-cap">VSSC · Jan–Jul 2024</figcaption>
+          </figure>
+        </section>
+
+        <!-- ===== Experience 2 (placeholder for your next entry) ===== -->
+        <!-- <section class="xp-row alt" aria-label="Experience 2">
+          <figure class="xp-media" data-reveal>
+            <img src="assets/experience-2.jpg" alt="Photo related to experience 2 (replace this image)" />
+            <figcaption class="xp-cap">Upload your photo</figcaption>
+          </figure>
+
+          <article class="xp-card" data-reveal>
+            <header class="xp-head">
+              <div class="xp-role">Experience Title</div>
+              <div class="xp-org">Company/Institute · Role type</div>
+            </header>
+            <div class="chips">
+              <span class="chip">Duration</span>
+              <span class="chip">Dates</span>
+              <span class="chip">Place</span>
+              <span class="chip success">On‑site / Remote</span>
+            </div>
+            <div class="xp-body">
+              <ul>
+                <li>Bullet point describing the work and impact.</li>
+                <li>Another bullet point — tools, methods, or results.</li>
+                <li>One more line for achievements or metrics.</li>
+              </ul>
+            </div>
+          </article>
+        </section> -->
+      </div>
+    </main>
+
+    <div class="tag-left">Experiences</div>
+
+    <footer>
+      <div class="foot">
+        <div>© <strong>2025</strong> Ashwin MR</div>
+        <div id="clock" aria-live="polite">—</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Reuse the site script (menu, clock, fluid background) -->
+  <script src="script.js" defer></script>
+  <script>
+    // Page‑local reveal on scroll — soft, Apple‑like
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+    }, {rootMargin: '0px 0px -5% 0px', threshold: 0.05});
+    document.querySelectorAll('[data-reveal]').forEach(el=>io.observe(el));
+  </script>
+</body>
+</html>
