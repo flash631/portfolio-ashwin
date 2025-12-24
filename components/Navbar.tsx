@@ -13,6 +13,19 @@ const Navbar: React.FC = () => {
     document.body.style.overflow = '';
   }, [location]);
 
+  // Close menu on ESC key press (accessibility)
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+        document.body.style.overflow = '';
+      }
+    };
+
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [isOpen]);
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
     if (!isOpen) {
@@ -50,15 +63,15 @@ const Navbar: React.FC = () => {
             className="w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-white/50 dark:hover:bg-white/10 text-slate-600 dark:text-white transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 border border-transparent hover:border-slate-200 dark:hover:border-white/10"
             aria-label="Toggle theme"
           >
-             {theme === 'dark' ? (
-               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-             ) : (
-               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-             )}
+            {theme === 'dark' ? (
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5" /><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" /></svg>
+            ) : (
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+            )}
           </button>
 
           {/* Hamburger Button */}
-          <button 
+          <button
             onClick={toggleMenu}
             className="w-12 h-12 flex items-center justify-center rounded-2xl hover:bg-white/50 dark:hover:bg-white/10 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 border border-transparent hover:border-slate-200 dark:hover:border-white/10"
             aria-label="Toggle menu"
@@ -75,13 +88,13 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Overlay Menu - Liquid Glass Theme */}
-      <div 
+      <div
         id="mobile-menu"
         className={`fixed inset-0 z-[60] flex items-center justify-center transition-all duration-500 ${isOpen ? 'opacity-100 visible bg-slate-200/20 dark:bg-black/40 backdrop-blur-sm' : 'opacity-0 invisible pointer-events-none backdrop-blur-none'}`}
         aria-hidden={!isOpen}
-        onClick={(e) => { if(e.target === e.currentTarget) toggleMenu(); }}
+        onClick={(e) => { if (e.target === e.currentTarget) toggleMenu(); }}
       >
-        <nav 
+        <nav
           className={`
             w-[360px] max-w-[90vw] p-3 
             bg-white/60 dark:bg-[#0f172a]/60 
@@ -99,12 +112,12 @@ const Navbar: React.FC = () => {
               const isActive = location.pathname === link.path;
               return (
                 <li key={link.path}>
-                  <Link 
-                    to={link.path} 
+                  <Link
+                    to={link.path}
                     className={`
                       flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group relative overflow-hidden
-                      ${isActive 
-                        ? 'bg-gradient-to-r from-white/80 to-white/60 dark:from-white/15 dark:to-white/5 shadow-lg dark:shadow-none text-primary dark:text-white backdrop-blur-md' 
+                      ${isActive
+                        ? 'bg-gradient-to-r from-white/80 to-white/60 dark:from-white/15 dark:to-white/5 shadow-lg dark:shadow-none text-primary dark:text-white backdrop-blur-md'
                         : 'text-slate-600 dark:text-slate-400 hover:bg-white/40 dark:hover:bg-white/5 hover:scale-[1.02] hover:text-slate-900 dark:hover:text-white'
                       }
                     `}
@@ -118,17 +131,17 @@ const Navbar: React.FC = () => {
                       p-2 rounded-xl transition-colors duration-300
                       ${isActive ? 'bg-primary/10 dark:bg-white/10' : 'bg-transparent group-hover:bg-white/30 dark:group-hover:bg-white/5'}
                     `}>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" 
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                         className={`w-5 h-5 transition-all duration-300 ${isActive ? 'stroke-primary dark:stroke-white drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]' : 'group-hover:stroke-primary dark:group-hover:stroke-white'}`}
                       >
                         {link.icon.split(' M').map((d, i) => (
-                           <path key={i} d={i > 0 ? 'M' + d : d} />
+                          <path key={i} d={i > 0 ? 'M' + d : d} />
                         ))}
                       </svg>
                     </span>
-                    
+
                     <span className="text-[15px] font-semibold tracking-wide">{link.label}</span>
-                    
+
                     {/* Subtle Arrow on Hover */}
                     <svg className={`w-4 h-4 ml-auto transition-all duration-300 ${isActive ? 'opacity-100 translate-x-0 text-primary dark:text-white' : 'opacity-0 -translate-x-2 group-hover:opacity-50 group-hover:translate-x-0'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M9 18l6-6-6-6" />

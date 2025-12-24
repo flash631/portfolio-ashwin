@@ -17,10 +17,10 @@ const Footer: React.FC = () => {
   }, []);
 
   return (
-    <footer className="border-t border-white/10 mt-auto z-10 relative bg-[#050810]/80 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center text-muted text-sm gap-2">
+    <footer className="border-t border-slate-200 dark:border-white/10 mt-auto z-10 relative bg-white/80 dark:bg-[#050810]/80 backdrop-blur-sm transition-colors">
+      <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center text-slate-500 dark:text-muted text-sm gap-2 transition-colors">
         <div>
-          © <strong className="text-white">2025</strong> Ashwin MR
+          © <strong className="text-slate-900 dark:text-white">2025</strong> Ashwin MR
         </div>
         <div aria-live="polite" className="font-mono opacity-80">
           {timeString || '—'}
