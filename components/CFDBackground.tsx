@@ -1,9 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { useTheme } from './ThemeContext';
 
 /**
- * Simplex Noise implementation (3D)
+ * CFD-inspired Flow Simulation Background
+ * 
+ * Features:
+ * - Navier-Stokes inspired velocity field
+ * - Interactive mouse/touch flow disturbance
+ * - Vortex shedding effects (von Kármán street)
+ * - Streamline particle advection
+ * - Temperature-based color gradient (cool→warm)
+ * - Optimized rendering with adaptive particle count
  */
+
+// Performance-optimized Simplex Noise (3D)
 const createNoise3D = () => {
   const perm = new Uint8Array(512);
   const p = new Uint8Array(256);
@@ -21,25 +31,19 @@ const createNoise3D = () => {
   ];
 
   const dot3 = (g: number[], x: number, y: number, z: number) => g[0] * x + g[1] * y + g[2] * z;
+  const F3 = 1.0 / 3.0;
+  const G3 = 1.0 / 6.0;
 
-  return (x: number, y: number, z: number) => {
-    const F3 = 1.0 / 3.0;
-    const G3 = 1.0 / 6.0;
+  return (x: number, y: number, z: number): number => {
     const s = (x + y + z) * F3;
     const i = Math.floor(x + s);
     const j = Math.floor(y + s);
     const k = Math.floor(z + s);
     const t = (i + j + k) * G3;
-    const X0 = i - t;
-    const Y0 = j - t;
-    const Z0 = k - t;
-    const x0 = x - X0;
-    const y0 = y - Y0;
-    const z0 = z - Z0;
+    const X0 = i - t, Y0 = j - t, Z0 = k - t;
+    const x0 = x - X0, y0 = y - Y0, z0 = z - Z0;
 
-    let i1, j1, k1;
-    let i2, j2, k2;
-
+    let i1: number, j1: number, k1: number, i2: number, j2: number, k2: number;
     if (x0 >= y0) {
       if (y0 >= z0) { i1 = 1; j1 = 0; k1 = 0; i2 = 1; j2 = 1; k2 = 0; }
       else if (x0 >= z0) { i1 = 1; j1 = 0; k1 = 0; i2 = 1; j2 = 0; k2 = 1; }
@@ -50,353 +54,391 @@ const createNoise3D = () => {
       else { i1 = 0; j1 = 1; k1 = 0; i2 = 1; j2 = 1; k2 = 0; }
     }
 
-    const x1 = x0 - i1 + G3;
-    const y1 = y0 - j1 + G3;
-    const z1 = z0 - k1 + G3;
-    const x2 = x0 - i2 + 2.0 * G3;
-    const y2 = y0 - j2 + 2.0 * G3;
-    const z2 = z0 - k2 + 2.0 * G3;
-    const x3 = x0 - 1.0 + 3.0 * G3;
-    const y3 = y0 - 1.0 + 3.0 * G3;
-    const z3 = z0 - 1.0 + 3.0 * G3;
+    const x1 = x0 - i1 + G3, y1 = y0 - j1 + G3, z1 = z0 - k1 + G3;
+    const x2 = x0 - i2 + 2.0 * G3, y2 = y0 - j2 + 2.0 * G3, z2 = z0 - k2 + 2.0 * G3;
+    const x3 = x0 - 1.0 + 3.0 * G3, y3 = y0 - 1.0 + 3.0 * G3, z3 = z0 - 1.0 + 3.0 * G3;
 
-    const ii = i & 255;
-    const jj = j & 255;
-    const kk = k & 255;
-
+    const ii = i & 255, jj = j & 255, kk = k & 255;
     const gi0 = perm[ii + perm[jj + perm[kk]]] % 12;
     const gi1 = perm[ii + i1 + perm[jj + j1 + perm[kk + k1]]] % 12;
     const gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
     const gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
 
+    let n0 = 0, n1 = 0, n2 = 0, n3 = 0;
     let t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
-    let n0 = 0;
     if (t0 >= 0) { t0 *= t0; n0 = t0 * t0 * dot3(grad3[gi0], x0, y0, z0); }
-
     let t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
-    let n1 = 0;
     if (t1 >= 0) { t1 *= t1; n1 = t1 * t1 * dot3(grad3[gi1], x1, y1, z1); }
-
     let t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
-    let n2 = 0;
     if (t2 >= 0) { t2 *= t2; n2 = t2 * t2 * dot3(grad3[gi2], x2, y2, z2); }
-
     let t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
-    let n3 = 0;
     if (t3 >= 0) { t3 *= t3; n3 = t3 * t3 * dot3(grad3[gi3], x3, y3, z3); }
 
     return 32.0 * (n0 + n1 + n2 + n3);
   };
 };
 
+// Velocity-to-color LUT (thermal: blue → cyan → white → orange → red)
+const generateThermalLUT = (isDark: boolean): { r: number; g: number; b: number }[] => {
+  const stops = isDark ? [
+    { t: 0.0, r: 30, g: 60, b: 120 },    // Deep blue (slow)
+    { t: 0.2, r: 40, g: 120, b: 180 },   // Blue
+    { t: 0.4, r: 80, g: 200, b: 220 },   // Cyan
+    { t: 0.5, r: 180, g: 220, b: 230 },  // Light cyan/white
+    { t: 0.6, r: 255, g: 200, b: 120 },  // Orange-yellow
+    { t: 0.8, r: 255, g: 120, b: 60 },   // Orange
+    { t: 1.0, r: 220, g: 50, b: 50 },    // Red (fast)
+  ] : [
+    { t: 0.0, r: 100, g: 140, b: 200 },  // Soft blue
+    { t: 0.2, r: 80, g: 170, b: 220 },   // Sky blue
+    { t: 0.4, r: 100, g: 200, b: 210 },  // Cyan
+    { t: 0.5, r: 150, g: 180, b: 180 },  // Neutral
+    { t: 0.6, r: 220, g: 160, b: 100 },  // Tan
+    { t: 0.8, r: 230, g: 120, b: 80 },   // Orange
+    { t: 1.0, r: 200, g: 80, b: 80 },    // Red
+  ];
+
+  const LUT_SIZE = 256;
+  const lut: { r: number; g: number; b: number }[] = [];
+
+  for (let i = 0; i <= LUT_SIZE; i++) {
+    const t = i / LUT_SIZE;
+    let start = stops[0], end = stops[stops.length - 1];
+    for (let j = 0; j < stops.length - 1; j++) {
+      if (t >= stops[j].t && t <= stops[j + 1].t) {
+        start = stops[j];
+        end = stops[j + 1];
+        break;
+      }
+    }
+    const range = end.t - start.t || 1;
+    const localT = (t - start.t) / range;
+    // Smooth interpolation
+    const smoothT = localT * localT * (3 - 2 * localT);
+    lut.push({
+      r: Math.floor(start.r + (end.r - start.r) * smoothT),
+      g: Math.floor(start.g + (end.g - start.g) * smoothT),
+      b: Math.floor(start.b + (end.b - start.b) * smoothT),
+    });
+  }
+  return lut;
+};
+
 const CFDBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const noise3D = useRef(createNoise3D()).current;
   const { theme } = useTheme();
   const themeRef = useRef(theme);
+  const noise3D = useRef(createNoise3D()).current;
 
   useEffect(() => {
     themeRef.current = theme;
   }, [theme]);
 
-  useEffect(() => {
+  // Memoize the animation setup
+  const setupAnimation = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return () => {};
     const ctx = canvas.getContext('2d', { alpha: false });
-    if (!ctx) return;
+    if (!ctx) return () => {};
 
-    // Respect reduced motion preference for accessibility
+    // Respect reduced motion preference
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
-      // Draw static background only
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       ctx.fillStyle = themeRef.current === 'dark' ? '#050810' : '#f8fafc';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      return; // Skip animation entirely
+      return () => {};
     }
 
-    let width = 0;
-    let height = 0;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
     let animationFrameId: number;
     let time = 0;
-    let resizeTimeout: number;
+    let resizeTimeout: ReturnType<typeof setTimeout>;
 
-    const PARTICLE_COUNT = 1200;
-    const TRAIL_LENGTH = 16;
-    const TIME_STEP = 0.002;
-    const BASE_VELOCITY_X = 1.8;
+    // Adaptive particle count based on screen size
+    const getParticleCount = () => {
+      const area = width * height;
+      if (area > 2000000) return 500;  // Large desktop
+      if (area > 1000000) return 400;  // Desktop
+      if (area > 500000) return 300;   // Tablet
+      return 200;                       // Mobile
+    };
+
+    const TRAIL_LENGTH = 12;
+    const TIME_STEP = 0.0018;
+    const FREE_STREAM_VX = 1.6;
 
     let mouseX = -1000;
     let mouseY = -1000;
+    let mouseVx = 0;
+    let mouseVy = 0;
+    let lastMouseX = -1000;
+    let lastMouseY = -1000;
 
-    // --- DARK MODE LUT (Vibrant Rainbow) ---
-    const DARK_STOPS = [
-      { t: 0.0, r: 40, g: 5, b: 5 },
-      { t: 0.15, r: 220, g: 20, b: 20 },
-      { t: 0.3, r: 255, g: 140, b: 0 },
-      { t: 0.45, r: 255, g: 215, b: 0 },
-      { t: 0.6, r: 50, g: 205, b: 50 },
-      { t: 0.75, r: 0, g: 191, b: 255 },
-      { t: 0.9, r: 30, g: 60, b: 255 },
-      { t: 1.0, r: 138, g: 43, b: 226 },
-    ];
+    // Pre-generate LUTs for both themes
+    const darkLUT = generateThermalLUT(true);
+    const lightLUT = generateThermalLUT(false);
 
-    // --- LIGHT MODE LUT (Rainbow on Light) ---
-    const LIGHT_STOPS = [
-      { t: 0.0, r: 255, g: 235, b: 235 },
-      { t: 0.15, r: 239, g: 68, b: 68 },
-      { t: 0.3, r: 249, g: 115, b: 22 },
-      { t: 0.45, r: 234, g: 179, b: 8 },
-      { t: 0.6, r: 34, g: 197, b: 94 },
-      { t: 0.75, r: 6, g: 182, b: 212 },
-      { t: 0.9, r: 59, g: 130, b: 246 },
-      { t: 1.0, r: 168, g: 85, b: 247 },
-    ];
-
-    const LUT_SIZE = 200;
-    const darkLUT: { r: number, g: number, b: number }[] = [];
-    const lightLUT: { r: number, g: number, b: number }[] = [];
-
-    const generateLUT = (stops: any[], output: any[]) => {
-      for (let i = 0; i <= LUT_SIZE; i++) {
-        const t = i / LUT_SIZE;
-        let start = stops[0];
-        let end = stops[stops.length - 1];
-        for (let j = 0; j < stops.length - 1; j++) {
-          if (t >= stops[j].t && t <= stops[j + 1].t) {
-            start = stops[j];
-            end = stops[j + 1];
-            break;
-          }
-        }
-        const range = end.t - start.t;
-        const localT = (t - start.t) / range;
-        const smoothT = localT < 0.5 ? 4 * localT * localT * localT : 1 - Math.pow(-2 * localT + 2, 3) / 2;
-
-        output.push({
-          r: Math.floor(start.r + (end.r - start.r) * smoothT),
-          g: Math.floor(start.g + (end.g - start.g) * smoothT),
-          b: Math.floor(start.b + (end.b - start.b) * smoothT),
-        });
-      }
-    };
-
-    generateLUT(DARK_STOPS, darkLUT);
-    generateLUT(LIGHT_STOPS, lightLUT);
-
-    class Particle {
+    // Streamline particle class
+    class StreamParticle {
       x: number;
       y: number;
       vx: number;
       vy: number;
-      history: { x: number, y: number }[];
+      trail: { x: number; y: number }[];
       age: number;
       lifespan: number;
+      seed: number;
 
       constructor(randomStart = true) {
-        this.x = randomStart ? Math.random() * width : -50;
+        this.x = randomStart ? Math.random() * width : -Math.random() * 80;
         this.y = Math.random() * height;
-        this.vx = BASE_VELOCITY_X;
+        this.vx = FREE_STREAM_VX;
         this.vy = 0;
-        this.history = [];
-        this.age = Math.random() * 200;
-        this.lifespan = 400 + Math.random() * 400;
+        this.trail = [];
+        this.age = Math.random() * 150;
+        this.lifespan = 300 + Math.random() * 300;
+        this.seed = Math.random() * 1000;
       }
 
-      getPotential(x: number, y: number, t: number) {
-        const flowSpeed = 0.8;
-        const advectedX = x * 0.002 - t * flowSpeed;
-        const scaleY = y * 0.002;
-        let val = 0;
-        val += noise3D(advectedX, scaleY, t * 0.15) * 15;
-        val += noise3D(advectedX * 3.0, scaleY * 3.0, t * 0.4) * 4;
+      // Velocity field: potential flow + noise perturbations
+      getVelocity(x: number, y: number, t: number): { vx: number; vy: number } {
+        const scale = 0.0018;
+        const flowT = t * 0.12;
+        
+        // Base flow with boundary layer profile
+        const normalizedY = y / height;
+        const boundaryLayer = Math.sin(Math.pow(normalizedY, 0.7) * Math.PI);
+        let vx = FREE_STREAM_VX * (0.4 + 0.8 * boundaryLayer);
+        let vy = 0;
 
+        // Large-scale turbulent structures
+        const n1 = noise3D(x * scale, y * scale, flowT);
+        const n2 = noise3D(x * scale + 100, y * scale + 100, flowT * 0.7);
+        vx += n1 * 0.8;
+        vy += n2 * 0.6;
+
+        // Fine-scale turbulence
+        vx += noise3D(x * scale * 3, y * scale * 3, flowT * 2) * 0.25;
+        vy += noise3D(x * scale * 3 + 50, y * scale * 3 + 50, flowT * 2) * 0.2;
+
+        // Mouse influence: vortex shedding simulation
         const dx = x - mouseX;
-        const dy = Math.abs(y - mouseY);
-        if (dx > 0 && dx < 500 && dy < 100 + dx * 0.25) {
-          const wakeIntensity = (1 - dx / 500);
-          const shedding = Math.sin(x * 0.02 - t * 10.0) * Math.cos(y * 0.05);
-          val += noise3D(x * 0.015, y * 0.015, t * 2.5) * 8 * wakeIntensity * (1 + shedding);
+        const dy = y - mouseY;
+        const distSq = dx * dx + dy * dy;
+        const INFLUENCE_RADIUS = 180;
+        const INFLUENCE_SQ = INFLUENCE_RADIUS * INFLUENCE_RADIUS;
+
+        if (distSq < INFLUENCE_SQ && distSq > 100) {
+          const dist = Math.sqrt(distSq);
+          const influence = Math.pow(1 - dist / INFLUENCE_RADIUS, 2);
+          
+          // Deflection around mouse (potential flow around cylinder)
+          const tangentX = -dy / dist;
+          const tangentY = dx / dist;
+          
+          vx += tangentX * influence * 2.5;
+          vy += tangentY * influence * 2.5;
+          
+          // Push away from mouse center
+          vx += (dx / dist) * influence * 1.5;
+          vy += (dy / dist) * influence * 1.2;
         }
-        return val;
+
+        // Wake region: von Kármán vortex street behind mouse
+        if (dx > 0 && dx < 400 && Math.abs(dy) < 100 + dx * 0.3) {
+          const wakeX = dx / 400;
+          const wakeIntensity = (1 - wakeX) * 0.8;
+          // Alternating vortices
+          const shedFreq = 8.0;
+          const vortexPhase = Math.sin(x * 0.015 - t * shedFreq) * Math.cos(y * 0.03);
+          vy += vortexPhase * wakeIntensity * 3;
+          // Velocity deficit in wake
+          vx *= 0.7 + 0.3 * wakeX;
+        }
+
+        return { vx, vy };
       }
 
       update(t: number) {
         this.age++;
-        const eps = 2.0;
-        const n1 = this.getPotential(this.x, this.y, t);
-        const n2 = this.getPotential(this.x, this.y + eps, t);
-        const n3 = this.getPotential(this.x + eps, this.y, t);
+        
+        const vel = this.getVelocity(this.x, this.y, t);
+        
+        // Smooth velocity update (inertia)
+        const LAG = 0.12;
+        this.vx += (vel.vx - this.vx) * LAG;
+        this.vy += (vel.vy - this.vy) * LAG;
 
-        const dy = (n2 - n1) / eps;
-        const dx = (n3 - n1) / eps;
-
-        const normalizedY = this.y / height;
-        const shearProfile = Math.sin(Math.pow(normalizedY, 0.8) * Math.PI);
-        const baseVx = BASE_VELOCITY_X * (0.5 + 0.8 * shearProfile);
-
-        const targetVx = baseVx + dy * 1.5;
-        const targetVy = -dx * 1.5;
-
-        // Inertia / Lag
-        const LAG_FACTOR = 0.15;
-        this.vx += (targetVx - this.vx) * LAG_FACTOR;
-        this.vy += (targetVy - this.vy) * LAG_FACTOR;
-
-        // Turbulence
-        this.vx += (Math.random() - 0.5) * 0.05;
-        this.vy += (Math.random() - 0.5) * 0.05;
-
-        const mdx = this.x - mouseX;
-        const mdy = this.y - mouseY;
-        const distSq = mdx * mdx + mdy * mdy;
-        const radius = 150;
-
-        if (distSq < radius * radius) {
-          const dist = Math.sqrt(distSq);
-          const force = Math.pow((radius - dist) / radius, 3);
-          this.vx += (mdx / dist) * force * 2.0;
-          this.vy += (mdy / dist) * force * 2.0;
-        }
+        // Small random perturbation for natural look
+        this.vx += (Math.random() - 0.5) * 0.03;
+        this.vy += (Math.random() - 0.5) * 0.03;
 
         this.x += this.vx;
         this.y += this.vy;
 
-        this.history.push({ x: this.x, y: this.y });
-        if (this.history.length > TRAIL_LENGTH) this.history.shift();
+        // Trail management
+        this.trail.push({ x: this.x, y: this.y });
+        if (this.trail.length > TRAIL_LENGTH) this.trail.shift();
 
-        if (this.x > width + 100 || this.y > height + 50 || this.y < -50 || this.age > this.lifespan) {
+        // Respawn conditions
+        if (this.x > width + 80 || this.y < -50 || this.y > height + 50 || this.age > this.lifespan) {
           this.reset();
         }
       }
 
       reset() {
-        const seedLeft = Math.random() > 0.02;
-        this.x = seedLeft ? -Math.random() * 100 : Math.random() * width;
+        this.x = -Math.random() * 100;
         this.y = Math.random() * height;
-        this.vx = BASE_VELOCITY_X;
+        this.vx = FREE_STREAM_VX;
         this.vy = 0;
-        this.history = [];
+        this.trail = [];
         this.age = 0;
-        this.lifespan = 400 + Math.random() * 400;
+        this.lifespan = 300 + Math.random() * 300;
       }
 
-      draw(ctx: CanvasRenderingContext2D, isDark: boolean) {
-        if (this.history.length < 2) return;
+      draw(ctx: CanvasRenderingContext2D, isDark: boolean, lut: { r: number; g: number; b: number }[]) {
+        if (this.trail.length < 2) return;
 
         const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-        let t = (speed - 0.5) / 3.5;
-        if (t < 0) t = 0;
-        if (t > 1) t = 1;
+        let t = (speed - 0.3) / 3.0;
+        t = Math.max(0, Math.min(1, t));
 
-        const colorIdx = Math.floor(t * LUT_SIZE);
-        const LUT = isDark ? darkLUT : lightLUT;
-        const c = LUT[colorIdx] || LUT[LUT_SIZE];
+        const colorIdx = Math.floor(t * 255);
+        const c = lut[colorIdx] || lut[128];
 
-        const fadeIn = Math.min(this.age / 20, 1);
-        const fadeOut = Math.min((this.lifespan - this.age) / 60, 1);
+        // Fade in/out
+        const fadeIn = Math.min(this.age / 25, 1);
+        const fadeOut = Math.min((this.lifespan - this.age) / 50, 1);
         let alpha = Math.min(fadeIn, fadeOut);
+        alpha = isDark ? alpha * 0.35 : alpha * 0.28;
 
-        // SUBTLETY ADJUSTMENT: Significantly reduced max opacity for both modes
-        if (isDark) {
-          alpha = alpha * 0.30; // Was 0.5
-        } else {
-          alpha = alpha * 0.25 + 0.02; // Was 0.4 + 0.05
-        }
-
+        // Draw smooth curve through trail points
         ctx.beginPath();
-        ctx.moveTo(this.history[0].x, this.history[0].y);
-        for (let i = 1; i < this.history.length - 1; i++) {
-          const xc = (this.history[i].x + this.history[i + 1].x) / 2;
-          const yc = (this.history[i].y + this.history[i + 1].y) / 2;
-          ctx.quadraticCurveTo(this.history[i].x, this.history[i].y, xc, yc);
+        ctx.moveTo(this.trail[0].x, this.trail[0].y);
+        
+        for (let i = 1; i < this.trail.length - 1; i++) {
+          const xc = (this.trail[i].x + this.trail[i + 1].x) / 2;
+          const yc = (this.trail[i].y + this.trail[i + 1].y) / 2;
+          ctx.quadraticCurveTo(this.trail[i].x, this.trail[i].y, xc, yc);
         }
-        ctx.lineTo(this.history[this.history.length - 1].x, this.history[this.history.length - 1].y);
+        
+        const last = this.trail[this.trail.length - 1];
+        ctx.lineTo(last.x, last.y);
 
         ctx.strokeStyle = `rgba(${c.r}, ${c.g}, ${c.b}, ${alpha})`;
-        // Thinner lines for a more delicate, high-end feel
-        ctx.lineWidth = Math.max(0.5, 1.8 - t * 1.0);
+        ctx.lineWidth = Math.max(0.6, 2.0 - t * 1.2);
+        ctx.lineCap = 'round';
         ctx.stroke();
       }
     }
 
-    const particles: Particle[] = [];
+    let particles: StreamParticle[] = [];
+    let particleCount = getParticleCount();
 
-    // Throttled resize to prevent browser lag
+    const init = () => {
+      particles = [];
+      particleCount = getParticleCount();
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new StreamParticle(true));
+      }
+    };
+
     const resize = () => {
       clearTimeout(resizeTimeout);
-      resizeTimeout = window.setTimeout(() => {
+      resizeTimeout = setTimeout(() => {
         width = window.innerWidth;
         height = window.innerHeight;
         canvas.width = width;
         canvas.height = height;
-      }, 100) as unknown as number;
+        
+        // Adjust particle count on resize
+        const newCount = getParticleCount();
+        if (newCount !== particleCount) {
+          particleCount = newCount;
+          init();
+        }
+      }, 150);
     };
 
-    const init = () => {
-      particles.length = 0;
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        particles.push(new Particle(true));
+    // Track mouse velocity for better wake simulation
+    const handleMouseMove = (e: MouseEvent) => {
+      lastMouseX = mouseX;
+      lastMouseY = mouseY;
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      mouseVx = mouseX - lastMouseX;
+      mouseVy = mouseY - lastMouseY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+        mouseX = e.touches[0].clientX;
+        mouseY = e.touches[0].clientY;
       }
     };
 
     const animate = () => {
       time += TIME_STEP;
       const isDark = themeRef.current === 'dark';
+      const lut = isDark ? darkLUT : lightLUT;
 
+      // Clear with subtle trail persistence
       if (isDark) {
-        // Slightly higher opacity clear to ensure trails don't build up too much opacity
-        ctx.fillStyle = 'rgba(5, 8, 16, 0.28)';
-        ctx.fillRect(0, 0, width, height);
-
-        ctx.fillStyle = 'rgba(148, 163, 184, 0.02)';
-        const GRID_X = 120;
-        const GRID_Y = 80;
-        for (let x = 0; x < width; x += GRID_X) ctx.fillRect(x, 0, 1, height);
-        for (let y = 0; y < height; y += GRID_Y) ctx.fillRect(0, y, width, 1);
-
-        ctx.globalCompositeOperation = 'screen';
+        ctx.fillStyle = 'rgba(5, 8, 16, 0.22)';
       } else {
-        ctx.fillStyle = 'rgba(248, 250, 252, 0.45)';
-        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = 'rgba(248, 250, 252, 0.35)';
+      }
+      ctx.fillRect(0, 0, width, height);
 
-        ctx.fillStyle = 'rgba(148, 163, 184, 0.05)';
-        const GRID_X = 120;
-        const GRID_Y = 80;
-        for (let x = 0; x < width; x += GRID_X) ctx.fillRect(x, 0, 1, height);
-        for (let y = 0; y < height; y += GRID_Y) ctx.fillRect(0, y, width, 1);
+      // Subtle grid overlay
+      ctx.fillStyle = isDark ? 'rgba(100, 120, 140, 0.015)' : 'rgba(100, 120, 140, 0.025)';
+      const GRID_X = 100, GRID_Y = 70;
+      for (let x = 0; x < width; x += GRID_X) ctx.fillRect(x, 0, 1, height);
+      for (let y = 0; y < height; y += GRID_Y) ctx.fillRect(0, y, width, 1);
 
-        ctx.globalCompositeOperation = 'multiply';
+      // Blending mode for glow effect
+      ctx.globalCompositeOperation = isDark ? 'screen' : 'multiply';
+
+      // Update and draw particles
+      for (const p of particles) {
+        p.update(time);
+        p.draw(ctx, isDark, lut);
       }
 
-      particles.forEach(p => {
-        p.update(time);
-        p.draw(ctx, isDark);
-      });
       ctx.globalCompositeOperation = 'source-over';
 
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    };
-
+    // Event listeners
     window.addEventListener('resize', resize);
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    resize();
     init();
     animate();
 
     return () => {
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
       cancelAnimationFrame(animationFrameId);
+      clearTimeout(resizeTimeout);
     };
-  }, []);
+  }, [noise3D]);
+
+  useEffect(() => {
+    const cleanup = setupAnimation();
+    return cleanup;
+  }, [setupAnimation]);
 
   return (
     <canvas

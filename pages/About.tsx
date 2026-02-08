@@ -9,13 +9,13 @@ const About: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12 lg:py-20">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-12 lg:py-20">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
-        
+
         {/* Text Content */}
         <div>
           <Reveal>
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-4">
+            <h1 className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-4">
               <span className="w-3 h-3 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 shadow-[0_0_12px_rgba(6,182,212,0.6)]"></span>
               About me
             </h1>
@@ -53,24 +53,24 @@ const About: React.FC = () => {
 
         {/* Gallery */}
         <div className="flex flex-col items-center justify-center">
-          <div 
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg" 
-            role="list" 
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg"
+            role="list"
             aria-label="Photo Gallery"
           >
             {images.map((src, idx) => (
-              <Reveal 
-                key={idx} 
-                delay={700 + idx * 100} 
+              <Reveal
+                key={idx}
+                delay={700 + idx * 100}
                 className={`relative aspect-[4/5] rounded-3xl overflow-hidden border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-md shadow-lg group focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 ${idx === 2 ? 'sm:col-span-2 sm:w-3/4 sm:mx-auto' : ''}`}
                 role="listitem"
                 tabIndex={0}
                 aria-label={`Portrait of Ashwin ${idx + 1}`}
               >
-                <img 
-                  src={src} 
-                  alt={`Ashwin portrait ${idx + 1}`} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 group-focus:scale-105" 
+                <img
+                  src={src}
+                  alt={`Ashwin portrait ${idx + 1}`}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 group-focus:scale-105"
                 />
               </Reveal>
             ))}

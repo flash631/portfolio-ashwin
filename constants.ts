@@ -22,10 +22,18 @@ export const EXPERIENCES: Experience[] = [
 
 export const PROJECTS: Project[] = [
   {
-    title: "Leveraging NLP and LLMs for Automated SysML Model Generation in MBSE",
+    title: "Adaptive Model Reduction (OpenFOAM + ROM)",
+    year: "2025",
+    images: ["images/fom_p1.png", "images/fom_p2.png", "images/fom_p3.png"],
+    link: "https://github.com/flash631/adaptive-model-reduction-switch",
+    linkText: "GitHub Link",
+    tagColor: "default"
+  },
+  {
+    title: "Integration of NLP and LLMs for Automated SysML Generation with Topological Robustness Benchmarking in MBSE",
     year: "2025",
     images: ["images/mbse_p1.png", "images/mbse_p2.png", "images/mbse_p3.png"],
-    link: "https://drive.google.com/file/d/1mmR1Owt_qN2jV60jqrzv4O0JwrtrUbZx/view?usp=drive_link",
+    link: "https://drive.google.com/file/d/11JDh1Rm1tFSdWF1YgvQ-DZysIaQLB_Lb/view?usp=sharing",
     linkText: "Project Description",
     tag: "UIUC",
     tagColor: "uiuc"
@@ -94,7 +102,7 @@ export const JOURNAL_PAPERS: Publication[] = [
 
 export const CONFERENCE_PAPERS: Publication[] = [
   {
-    title: "Leveraging Natural Language Processing and Large Language Models for Automated SysML Model Generation in MBSE",
+    title: "Integration of NLP and LLMs for Automated SysML Generation with Topological Robustness Benchmarking in MBSE",
     authors: "M. R. Aswin and Jason Merret",
     venue: "2026 AIAA Scitech, Upcoming conference presentation on Jan 8, 2026",
     type: "conference"

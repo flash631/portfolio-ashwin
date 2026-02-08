@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050810" />
+    <meta name="description" content="Ashwin M R - Aerospace Engineer Portfolio" />
+    <title>Ashwin M R — Aerospace Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              bg: '#050810', // Dark mode bg
+              'bg-light': '#f8fafc', // Light mode bg (slate-50)
+              primary: '#06b6d4', // Cyan-500
+              secondary: '#3b82f6', // Blue-500
+              accent: '#f59e0b', // Amber-500
+              muted: '#94a3b8', // Slate-400
+              'muted-dark': '#cbd5e1', // Slate-300 for text in dark mode (Brighter)
+            },
+            animation: {
+              'wave': 'wave 2.5s ease-in-out infinite',
+              'fade-in': 'fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+            },
+            keyframes: {
+              wave: {
+                '0%': { transform: 'rotate(0deg)' },
+                '10%': { transform: 'rotate(14deg)' },
+                '20%': { transform: 'rotate(-8deg)' },
+                '30%': { transform: 'rotate(14deg)' },
+                '40%': { transform: 'rotate(-4deg)' },
+                '50%': { transform: 'rotate(10deg)' },
+                '60%, 100%': { transform: 'rotate(0deg)' },
+              },
+              fadeIn: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #f8fafc; /* Default light */
+        color: #0f172a; /* Slate-900 */
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+      .dark body {
+        background-color: #050810;
+        color: #f1f5f9; /* Slate-100 - Much brighter text */
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1; /* Slate-300 */
+        border-radius: 4px;
+      }
+      .dark ::-webkit-scrollbar-thumb {
+        background: #334155;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+      .dark ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
+    </style>
+
+  <link rel="stylesheet" href="/index.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "react/": "https://aistudiocdn.com/react@^19.2.0/",
+          "react": "https://aistudiocdn.com/react@^19.2.0",
+          "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6",
+          "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+        }
+      }
+    </script>
+  <script type="module" crossorigin src="/portfolio-ashwin/assets/index-scGXkt21.js"></script>
+</head>
+  <body>
+    <div id="root"></div>
+</body>
+</html>

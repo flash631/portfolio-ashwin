@@ -23,7 +23,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12 lg:py-20">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-12 lg:py-20">
       <Reveal>
         <h1 className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight transition-colors">Contact</h1>
         <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mb-12 transition-colors">I'd love to hear from you. Fill out the form or use the details on the right.</p>
