@@ -22,6 +22,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       case '/about': return 'About';
       case '/experiences': return 'Experiences';
       case '/projects': return 'Aerospace Engineer';
+      case '/simulations': return 'Simulations';
       case '/publications': return 'Publications';
       case '/contact': return 'Contact';
       default: return 'Portfolio';
