@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.vite/
+.source-download/
+*.local
+.env*
+playwright-report/
+test-results/
+.qa-artifacts/

@@ -2,6 +2,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 permissions:
   contents: read
   pages: write
@@ -27,13 +28,19 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install --no-package-lock
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
 
       - name: Build
-        run: npm run build -- --base=/portfolio-ashwin/
+        run: npm run build
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: dist
 

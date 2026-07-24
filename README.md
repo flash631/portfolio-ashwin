@@ -1,19 +1,26 @@
-# Ashwin M R Portfolio
+# Ashwin M R portfolio
 
-React + Vite single-page portfolio for showcasing aerospace engineering work, projects, and publications. Uses a hash router so it can be deployed on static hosts without server config.
+A responsive, single-page aerospace engineering portfolio built with React, TypeScript, and Vite. The visual system follows a technical dossier: a strong identity sheet, repository-backed project evidence, publication records, OpenFOAM studies, and a compact working toolkit.
 
-## Getting Started
-- Prerequisite: Node.js 18+
-- Install dependencies: `npm install`
-- Start dev server: `npm run dev` (then open the printed local URL)
-- Production build: `npm run build`
-- Preview build locally: `npm run preview`
+## Local development
 
-## Project Structure
-- `pages/` route-level screens (Home, About, Experiences, Projects, Publications, Contact)
-- `components/` shared UI pieces and theming
-- `images/` static assets referenced by the UI
-- `index.html`/`index.tsx` entry point and client-side mounting
+- Install dependencies: `npm ci`
+- Start the site: `npm run dev`
+- Typecheck: `npm run typecheck`
+- Build for production: `npm run build`
+- Preview the production build: `npm run preview`
 
-## Deployment Notes
-Because routes use hash-based navigation, you can host the built `dist/` folder on any static host (GitHub Pages, Netlify, etc.) without additional routing rules.
+The Vite base path is `/portfolio-ashwin/` for GitHub Pages project hosting. Static media lives in `public/`, content records live in `constants.ts` and `simulationData.ts`, and the design tokens and responsive rules live in `index.css`.
+
+The landing page uses section anchors for About, Experience, Publications, Projects, Simulations, Skills, and Contact. Full simulation studies use static-host-safe query URLs such as `/portfolio-ashwin/?simulation=periodic-hill`; each page renders the complete source narrative, locally typeset equations, videos, figures, and captions.
+
+## Deployment
+
+Pushes to `main` run the GitHub Pages workflow. The workflow installs from the lockfile, typechecks, builds, uploads `dist/`, and deploys the Pages artifact.
+
+## Content notes
+
+- Publication and project claims follow the source portfolio records.
+- The About laboratory gallery and final Contact section preserve the fuller predecessor’s content while using the current dossier styling.
+- Patent-related items are labelled as entries because the current source does not specify their grant status.
+- Update the profile location, external links, and dated publication status whenever those details change.

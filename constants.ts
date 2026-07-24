@@ -25,7 +25,7 @@ export const PROJECTS: Project[] = [
     title: "Adaptive Model Reduction (OpenFOAM + ROM)",
     year: "2025",
     images: ["images/fom_p1.png", "images/fom_p2.png", "images/fom_p3.png"],
-    link: "https://github.com/flash631/adaptive-model-reduction-switch",
+    link: "https://github.com/flash631/adaptive-model-reduction.git",
     linkText: "GitHub Link",
     tagColor: "default"
   },
@@ -101,12 +101,6 @@ export const JOURNAL_PAPERS: Publication[] = [
 ];
 
 export const CONFERENCE_PAPERS: Publication[] = [
-  {
-    title: "Integration of NLP and LLMs for Automated SysML Generation with Topological Robustness Benchmarking in MBSE",
-    authors: "M. R. Aswin and Jason Merret",
-    venue: "2026 AIAA Scitech, Upcoming conference presentation on Jan 8, 2026",
-    type: "conference"
-  },
   {
     title: "Structural and Thermal Analysis of a CubeSat",
     authors: "M.R. Aswin, Pavithran, A., Mangrole, Y., Ravi, B.",
