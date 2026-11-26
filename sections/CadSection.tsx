@@ -46,7 +46,7 @@ export default function CadSection() {
           <CadViewer key={model.id} model={model} variant="section" fileOverride={fileOverride} />
         </Suspense>
           {model.states && (
-            <CadStateBar key={model.id} model={model} onStateFile={setFileOverride} />
+            <CadStateBar model={model} onStateFile={setFileOverride} />
           )}
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -827,7 +827,7 @@ export default function CadViewer({ model, variant = 'section', fileOverride }: 
 
   const selectedPart = selected !== null ? parts[selected] : undefined;
 
-  const tools: { id: Tool; label: string; icon: React.ReactNode }[] = [
+  const tools: { id: Tool; label: string; icon: ReactNode }[] = [
     { id: 'orbit', label: 'Orbit', icon: <Globe size={20} /> },
     { id: 'pan', label: 'Pan', icon: <Hand size={20} /> },
     { id: 'zoom', label: 'Zoom', icon: <MagnifyingGlassPlus size={20} /> },

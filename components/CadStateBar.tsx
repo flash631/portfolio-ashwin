@@ -18,6 +18,11 @@ export default function CadStateBar({
   const states = model.states ?? [];
   const [idx, setIdx] = useState(0);
   const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    setIdx(0);
+    setPlaying(false);
+  }, [model.id]);
   const timer = useRef<number | null>(null);
 
   const pick = (i: number) => {

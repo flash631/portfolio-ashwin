@@ -52,7 +52,7 @@ export default function CadDetailPage({ model, requestedId }: { model?: CadModel
           <CadViewer key={model.id} model={model} variant="full" fileOverride={fileOverride} />
         </Suspense>
         {model.states && (
-          <CadStateBar key={model.id} model={model} onStateFile={setFileOverride} />
+          <CadStateBar model={model} onStateFile={setFileOverride} />
         )}
       </section>
 
