@@ -22,6 +22,14 @@ export const EXPERIENCES: Experience[] = [
 
 export const PROJECTS: Project[] = [
   {
+    title: "ThermalPath — Open-Source Thermal Design Library for Electronics Cooling",
+    year: "2026",
+    images: ["images/thermalpath_p1.png", "images/thermalpath_p2.png", "images/thermalpath_p3.png"],
+    link: "https://github.com/flash631/thermalpath",
+    linkText: "GitHub Link",
+    tagColor: "default"
+  },
+  {
     title: "Adaptive Model Reduction (OpenFOAM + ROM)",
     year: "2025",
     images: ["images/fom_p1.png", "images/fom_p2.png", "images/fom_p3.png"],

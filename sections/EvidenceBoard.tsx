@@ -150,14 +150,14 @@ export default function EvidenceBoard() {
           <div className="contact-spotlight-grid">
             <div>
               <p>Interested in research collaborations, engineering opportunities, or a thoughtful technical conversation?</p>
-              <a className="contact-button" href="mailto:aswinmr0060@gmail.com">
+              <a className="contact-button" href="mailto:aswinmr006@gmail.com">
                 Get in touch <ArrowUpRight size={15} weight="bold" aria-hidden="true" />
               </a>
             </div>
             <div className="contact-details">
-              <a href="mailto:aswinmr0060@gmail.com">
+              <a href="mailto:aswinmr006@gmail.com">
                 <EnvelopeSimple size={18} aria-hidden="true" />
-                aswinmr0060@gmail.com
+                aswinmr006@gmail.com
               </a>
               <p><MapPin size={18} aria-hidden="true" /> Urbana, Illinois, US</p>
               <div className="social-row" aria-label="Social links">
@@ -165,7 +165,7 @@ export default function EvidenceBoard() {
                 <a href={SOCIAL_LINKS.github} target="_blank" rel="noreferrer" aria-label="GitHub"><GithubLogo size={22} weight="fill" /></a>
                 <a href={SOCIAL_LINKS.x} target="_blank" rel="noreferrer" aria-label="X"><XLogo size={20} /></a>
                 <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"><InstagramLogo size={21} /></a>
-                <a href="mailto:aswinmr0060@gmail.com" aria-label="Email"><EnvelopeSimple size={21} /></a>
+                <a href="mailto:aswinmr006@gmail.com" aria-label="Email"><EnvelopeSimple size={21} /></a>
               </div>
             </div>
           </div>

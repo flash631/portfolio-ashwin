@@ -112,7 +112,7 @@ export function ProjectIndex() {
       <DetailHeader
         index="04"
         title="Project archive"
-        description="Eight projects spanning CFD, thermal systems, model reduction, MBSE, optical analysis, propulsion, and robotics."
+        description="Nine projects spanning thermal design software, CFD, model reduction, MBSE, optical analysis, propulsion, and robotics."
       />
       <div className="project-index-grid">
         {PROJECTS.map((project, index) => (

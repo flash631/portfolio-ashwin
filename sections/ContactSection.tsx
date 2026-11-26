@@ -14,7 +14,7 @@ import {
 import { SOCIAL_LINKS } from '../portfolioData';
 import { DetailHeader } from './DetailSections';
 
-const EMAIL = 'aswinmr0060@gmail.com';
+const EMAIL = 'aswinmr006@gmail.com';
 
 const CONTACT_LINKS = [
   { label: 'LinkedIn', href: SOCIAL_LINKS.linkedin, icon: <LinkedinLogo size={21} weight="fill" /> },
