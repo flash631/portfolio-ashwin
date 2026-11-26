@@ -52,6 +52,7 @@ export const NAV_ITEMS = [
   { id: 'publication-index', label: 'Publications' },
   { id: 'project-index', label: 'Projects' },
   { id: 'simulation-index', label: 'Simulations' },
+  { id: 'cad-models', label: 'CAD Models' },
   { id: 'skill-index', label: 'Skills' },
   { id: 'contact', label: 'Contact' },
 ] as const;
@@ -60,6 +61,10 @@ export const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path.rep
 
 export const simulationHref = (id: string) => (
   `${import.meta.env.BASE_URL}?simulation=${encodeURIComponent(id)}`
+);
+
+export const cadHref = (id: string) => (
+  `${import.meta.env.BASE_URL}?cad=${encodeURIComponent(id)}`
 );
 
 export const sectionHref = (id: string, fromSimulationPage = false) => (

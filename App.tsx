@@ -8,10 +8,13 @@ import EvidenceBoard from './sections/EvidenceBoard';
 import HeroSection from './sections/HeroSection';
 import SiteFooter from './sections/SiteFooter';
 import { SIMULATIONS } from './simulationData';
+import { CAD_MODELS } from './cadModels';
+import CadSection from './sections/CadSection';
 
 type Theme = 'light' | 'night';
 
 const SimulationDetailPage = lazy(() => import('./sections/SimulationDetailPage'));
+const CadDetailPage = lazy(() => import('./sections/CadDetailPage'));
 
 function getInitialTheme(): Theme {
   const saved = window.localStorage.getItem('portfolio-theme');
@@ -26,6 +29,11 @@ export default function App() {
     ? SIMULATIONS.find((item) => item.id === requestedSimulationId)
     : undefined;
   const simulationPage = requestedSimulationId !== null;
+  const requestedCadId = new URLSearchParams(window.location.search).get('cad');
+  const cadModel = requestedCadId
+    ? CAD_MODELS.find((item) => item.id === requestedCadId)
+    : undefined;
+  const cadPage = requestedCadId !== null;
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -57,9 +65,11 @@ export default function App() {
   useEffect(() => {
     document.title = simulation
       ? `${simulation.title} — Ashwin M R`
-      : 'Ashwin M R — Aerospace systems engineer';
+      : cadModel
+        ? `${cadModel.name} — Ashwin M R`
+        : 'Ashwin M R — Aerospace systems engineer';
     window.scrollTo({ top: 0, behavior: 'auto' });
-  }, [simulation]);
+  }, [simulation, cadModel]);
 
   return (
     <div className="site-shell">
@@ -67,7 +77,7 @@ export default function App() {
       <PortfolioHeader
         theme={theme}
         onThemeToggle={() => setTheme((current) => (current === 'light' ? 'night' : 'light'))}
-        simulationPage={simulationPage}
+        simulationPage={simulationPage || cadPage}
       />
       <div className="page-frame">
         <DatumRail progress={scrollProgress} />
@@ -75,6 +85,10 @@ export default function App() {
           {simulationPage ? (
             <Suspense fallback={<div className="simulation-loading" role="status">Loading simulation study…</div>}>
               <SimulationDetailPage simulation={simulation} requestedId={requestedSimulationId || ''} />
+            </Suspense>
+          ) : cadPage ? (
+            <Suspense fallback={<div className="simulation-loading" role="status">Loading CAD model…</div>}>
+              <CadDetailPage model={cadModel} requestedId={requestedCadId || ''} />
             </Suspense>
           ) : (
             <>
@@ -85,6 +99,7 @@ export default function App() {
               <PublicationIndex />
               <ProjectIndex />
               <SimulationIndex />
+              <CadSection />
               <SkillIndex />
               <ContactSection />
             </>

@@ -177,7 +177,7 @@ export function SkillIndex() {
   return (
     <section id="skill-index" className="detail-section skill-index">
       <DetailHeader
-        index="06"
+        index="07"
         title="Technical skills"
         description="Tools and methods I use across simulation, engineering analysis, software development, and systems work."
       />
